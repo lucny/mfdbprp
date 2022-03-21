@@ -20,6 +20,11 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    # URL "admin/" je namapováno na administrační rozhraní webu
     path('admin/', admin.site.urls),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('movies/', include('movies.urls')),
+    path('', RedirectView.as_view(url='movies/')),
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

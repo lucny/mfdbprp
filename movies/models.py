@@ -2,6 +2,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.urls import reverse
 
+
 def attachment_path(instance, filename):
     return 'film/' + str(instance.film.id) + '/attachments/' + filename
 
@@ -26,6 +27,8 @@ class Film(models.Model):
     runtime = models.IntegerField(blank=True, null=True,
                                   help_text='Please enter an integer value (minutes)',
                                   verbose_name='Runtime')
+    poster = models.ImageField(upload_to='film/posters/%Y/%m/%d/', blank=True, null=True,
+                               verbose_name="Poster")
     rate = models.FloatField(default=5.0,
                              validators=[MinValueValidator(1.0), MaxValueValidator(10.0)],
                              null=True, help_text='Please enter an float value (range 1.0 - 10.0)',

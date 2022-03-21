@@ -1,3 +1,6 @@
 from django.urls import path, include
+from movies import views
 
-urlspatterns = []
+urlpatterns = [
+    path('', views.index, name='index'),
+]
