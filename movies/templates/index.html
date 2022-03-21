@@ -1,5 +1,7 @@
+<!-- Šablona dědí základní šablonu "base.html" -->
 {% extends "base.html" %}
 
+<!-- Do bloku content vsuneme následující kód  -->
 {% block content %}
 <div class="row mt-3 mb-3 bg-warning p-3">
     <div class="col-sm-12">
@@ -7,15 +9,19 @@
     </div>
 </div>
 <div class="row">
+    <!-- Příkaz prochází v cyklu proměnnou films typu list a provádí výpis pro každý objekt filmu -->
     {% for film in films %}
     <div class="col-sm-4">
         <div class="card">
+            <!-- Jestliže film obsahuje poster (plakát) -->
             {% if film.poster %}
+            <!-- film.poster.url - předává url adresu uploadovaného souboru -->
             <img class="card-img-top" src="{{ film.poster.url }}" alt="{{ film.title }}">
             {% endif %}
             <div class="card-body">
                 <h4 class="card-title">{{ film.title }}</h4>
-                <p class="card-text"><strong>Žánry:</strong> 
+                <p class="card-text"><strong>Žánry:</strong>
+                <!-- Prochází všechny žánry, které byly filmu přiřazeny -->
                 {% for genre in film.genres.all %}{{ genre.name }}{% endfor %}
                 </p>
                 <p><strong>Hodnocení:</strong> {{ film.rate }}</p>
@@ -27,6 +33,7 @@
 </div>
 <div class="row">
     <div class="col-sm-12">
+        <!-- Vypisuje údaj o počtu filmů předaný prostřednictvím proměnné num_films -->
         <strong>Celkový počet filmů:</strong> {{ num_films }}
     </div>
 </div>
