@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.views.generic import ListView, DetailView
+
 from movies.models import Film, Genre, Attachment
 
 
@@ -20,3 +22,21 @@ def index(request):
     return render(request, 'index.html', context=context)
 
 
+""" Třída dědí z generické třídy ListView, která umí vypsat z databáze všechny objekty určeného modelu """
+class FilmListView(ListView):
+    # Nastavení požadovaného modelu
+    model = Film
+    # Pojmenování objektu, v němž budou šabloně předána data z modelu (tj. databázové tabulky)
+    context_object_name = 'films_list'
+    # Umístění a název šablony
+    template_name = 'film/list.html'
+
+
+""" Třída dědí z generické třídy DetailView, která umí vypsat z databáze jeden objekt určeného modelu """
+class FilmDetailView(DetailView):
+    # Nastavení požadovaného modelu
+    model = Film
+    # Pojmenování objektu, v němž budou šabloně předána data z modelu (tj. databázové tabulky)
+    context_object_name = 'film_detail'
+    # Umístění a název šablony
+    template_name = 'film/detail.html'
