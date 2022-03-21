@@ -15,35 +15,13 @@
 </head>
 <body>
     <!-- Záhlaví stránky -->
-    <header class="jumbotron-fluid p-5 text-center bg-dark">
-        <h1 class="text-white text-uppercase display-3">Malá filmová databáze</h1>
-    </header>
+    {% block header %}
+        {% include "page/header.html" %}
+    {% endblock %}
     <!-- Navigační lišta -->
-    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-      <!-- Brand -->
-      <a class="navbar-brand text-warning" href="#">MFD</a>
-
-      <!-- Přepínací tlačítko pro mobilní zobrazení -->
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <!-- Hlavní menu -->
-      <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <!-- Odkaz na úvodní stránku webu -->
-            <a class="nav-link active" href="{% url 'index' %}">Úvodní stránka</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Filmy</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Žánry</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    {% block navbar %}
+        {% include "page/navbar.html" %}
+    {% endblock %}
     <!-- Hlavní blok stránky -->
     <main>
         <div class="container-fluid">
@@ -52,12 +30,9 @@
         </div>
     </main>
     <!-- Zápatí stránky -->
-    <footer class="container-fluid text-center">
-        <hr>
-        <!-- Vykreslí logo školy ze statického souboru skola-logo.png -->
-        <p><img src="{% static 'img/skola-logo.png' %}" alt="Logo školy"></p>
-        <p>&copy; 2021 - SŠPU Opava</p>
-    </footer>
+    {% block footer %}
+        {% include "page/footer.html" %}
+    {% endblock %}
     <!-- Připojení externích JS knihoven -->
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
