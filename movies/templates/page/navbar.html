@@ -14,12 +14,20 @@
                 <!-- Odkaz na úvodní stránku webu -->
                 <a class="nav-link active" href="{% url 'index' %}">Úvodní stránka</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Filmy</a>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'films' %}">Filmy</a>
+          </li>
+            <!-- Dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                Žánry
+              </a>
+              <div class="dropdown-menu">
+                 {% for genre in genres %}
+                    <a class="dropdown-item" href="{% url 'film-genre' genre.name %}">{{ genre.name }}</a>
+                 {% endfor %}
+              </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Žánry</a>
-            </li>
-        </ul>
+         </ul>
     </div>
 </nav>

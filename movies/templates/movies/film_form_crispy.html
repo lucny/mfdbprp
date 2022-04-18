@@ -1,0 +1,22 @@
+{# https://simpleisbetterthancomplex.com/tutorial/2018/08/13/how-to-use-bootstrap-4-forms-with-django.html #}
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Editace filmu{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-sm-12 bg-warning">
+        <h2 class="display-4 text-center">Editace filmu</h2>
+    </div>
+</div>
+<div class="row mt-5 mb-3">
+  <div class="col-12">
+  <form action="" method="post" enctype="multipart/form-data" class="container">
+    {% csrf_token %}
+    {{ form|crispy }}
+      <button type="submit" class="btn btn-success">Odeslat</button>
+  </form>
+  </div>
+</div>
+{% endblock %}

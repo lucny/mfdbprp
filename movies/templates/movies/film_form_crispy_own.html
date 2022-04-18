@@ -1,0 +1,31 @@
+{# https://www.geeksforgeeks.org/render-django-form-fields-manually/ #}
+{# https://simpleisbetterthancomplex.com/article/2017/08/19/how-to-render-django-form-manually.html #}
+
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block title %}Editace filmu{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-sm-12 bg-warning">
+        <h2 class="display-4 text-center">Editace filmu</h2>
+    </div>
+</div>
+<div class="row mt-5 mb-3">
+  <div class="col-12">
+  <form action="" method="post" enctype="multipart/form-data" class="container" novalidate>
+    {% csrf_token %}
+      <div class="form-group">
+          <label class="col-md-2">{{ form.title.label }}</label>
+          <div class="col-md-10">
+            {% render_field form.title class="form-control" %}
+          </div>
+      </div>
+    {{ form.title|as_crispy_field }}
+      <button type="submit" class="btn btn-success">Odeslat</button>
+  </form>
+  </div>
+</div>
+{% endblock %}

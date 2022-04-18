@@ -2,13 +2,13 @@
 {% extends "base.html" %}
 
 <!-- Vložení informace do bloku titulu stránky -->
-{% block title %}Seznam filmů{% endblock %}
+{% block title %}{{ view_title }}{% endblock %}
 
 <!-- Obsahový blok stránky -->
 {% block content %}
 <div class="row mb-3">
     <div class="col-sm-12 bg-warning">
-        <h2 class="display-4 text-center">Seznam filmů</h2>
+        <h2 class="display-4 text-center">{{ view_title }}</h2>
     </div>
 </div>
 <div class="row">
@@ -23,12 +23,17 @@
                 <!-- Odkaz ještě musí být doplněn o adresu stránky s detailem filmu -->
                 <h4 class="card-title"><a href="{% url 'film_detail' film.pk %}">{{ film.title }}</a></h4>
                 <!-- Výpis všech žánrů filmu - odkaz bude posléze ukazovat všechny filmy daného žánru -->
-                <p class="card-text">{% for genre in film.genres.all %}<a href="#" class="btn btn-light">{{ genre.name }}</a> {% endfor %}</p>
+                <p class="card-text">{% for genre in film.genres.all %}<a href="{% url 'film-genre' genre.name %}" class="btn btn-light">{{ genre.name }}</a> {% endfor %}</p>
                 <!-- Odkaz ještě musí být doplněn o adresu stránky s detailem filmu -->
                 <a href="{% url 'film_detail' film.pk %}" class="btn btn-primary">Podrobnosti</a>
             </div>
         </div>
     </div>
     {% endfor %}
+</div>
+<div class="row mb-3">
+    <div class="col-sm-12 text-center">
+        <a href="{% url 'film_create' %}" class="btn btn-success">Nový film</a>
+    </div>
 </div>
 {% endblock %}

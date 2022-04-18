@@ -1,0 +1,6 @@
+<ul class="list-group">
+    {% for genre in genres %}
+    <li class="list-group-item list-group-item-info"><a class="text-dark" href="{% url 'film-genre' genre.name %}">{{ genre.name }}</a>
+        <span class="badge badge-dark">{{ genre.film_set.all.count }}</span></li>
+    {% endfor %}
+</ul>

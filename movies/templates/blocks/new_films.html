@@ -1,0 +1,30 @@
+{% load mathfilters %}
+
+<div>
+    {% for film in films %}
+        <div class="row mb-4 border-bottom">
+            <div class="col-md-2">
+                <a href="{% url 'film_detail' film.pk %}">
+                <img src="{{ film.poster.url }}" alt="{{ film.title }}"
+                     class="img-fluid">
+                </a>
+            </div>
+            <div class="col-md-8">
+                <h4><a href="{% url 'film_detail' film.pk %}">{{ film.title|upper }}</a></h4>
+                <p>{{ film.plot|truncatewords:30 }}</p>
+                <p>Stopáž: {{ film.runtime }} min.,
+                    datum uvedení: {{ film.release_date|date:'d. m. Y' }}</p>
+                <p>Žánry: {% for genre in film.genres.all %}
+                    <a href="#" class="btn btn-info">{{ genre.name }}</a>
+                {% endfor %}</p>
+            </div>
+            <div class="col-md-2">
+                <span class="display-4">{{ film.rate }}</span>
+                <div class="progress">
+                    <div class="progress-bar bg-info"
+                         style="width:{{ film.rate|mul:'10'|floatformat }}%"></div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
