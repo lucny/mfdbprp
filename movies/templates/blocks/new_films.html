@@ -4,10 +4,14 @@
     {% for film in films %}
         <div class="row mb-4 border-bottom">
             <div class="col-md-2">
-                <a href="{% url 'film_detail' film.pk %}">
-                <img src="{{ film.poster.url }}" alt="{{ film.title }}"
-                     class="img-fluid">
-                </a>
+                {% if film.poster %}
+                    <a href="{% url 'film_detail' film.pk %}">
+                    <img src="{{ film.poster.url }}" alt="{{ film.title }}"
+                         class="img-fluid">
+                    </a>
+                {% else %}
+                    <a href="{% url 'film_detail' film.pk %}">Plakát k filmu není k dispozici</a>
+                {% endif %}
             </div>
             <div class="col-md-8">
                 <h4><a href="{% url 'film_detail' film.pk %}">{{ film.title|upper }}</a></h4>

@@ -8,18 +8,15 @@ from .models import Film, Genre, Attachment
 
 def index(request):
     """Metoda připravuje pohled pro domovskou stránku - šablona index.html"""
-
-    # Uložení celkového počtu filmů v databázi do proměnné num_films
-    num_films = Film.objects.all().count()
-    # Do proměnné films se uloží 3 filmy uspořádané podle hodnocení (sestupně)
-    films = Film.objects.order_by('-rate')[:3]
-
-    """ Do proměnné context, která je typu slovník (dictionary) uložíme hodnoty obou proměnných """
+    """ Do proměnné context, která je typu slovník (dictionary), přiřadíme jednotlivým klíčům informace získané z databáze
+     pomocí ORM systému Djanga - využíváme jednotlivých datových modelů a pracujeme s nimi jako se sadami objektů """
     context = {
-        'num_films': num_films,
-        'films': films,
+        # Výběr filmů podle data uvedení uspořádaný sestupně - 3 nejnovější filmy
+        'films': Film.objects.order_by('-release_date')[:3],
+        # Výběr deseti nejlepších filmů (uspořádány sestupně podle hodnocení)
+        'top_ten': Film.objects.order_by('-rate').all()[:10],
+        # Výběr všech žánrů uspořádaných abecedně podle názvu
         'genres': Genre.objects.order_by('name').all(),
-        'top_tens': Film.objects.order_by('-rate').all()[:10]
     }
 
     """ Pomocí metody render vyrendrujeme šablonu index.html a předáme ji hodnoty v proměnné context k zobrazení """
@@ -35,21 +32,33 @@ class FilmListView(ListView):
     # Umístění a název šablony
     template_name = 'film/list.html'
 
+    # Metoda vrací sadu záznamů filtrovaných podle nastavení klíčového argumentu 'genre_name'
     def get_queryset(self):
+        # Jestliže je v klíčových atributech předaných objektu (self.kwargs) zastoupen atribut 'genre_name' ...
         if 'genre_name' in self.kwargs:
-            return Film.objects.filter(genres__name=self.kwargs['genre_name']).all() # Get 5 books containing the title war
+            # ... z databáze jsou vybrány všechny objekty (filmy), patřící k žánru, na který klíčový atribut odkazuje
+            # genres__name=self.kwargs['genre_name']
+            return Film.objects.filter(genres__name=self.kwargs['genre_name']).all()
         else:
+            # ... v opačném případě jsou vybrány všechny objekty (filmy)
             return Film.objects.all()
 
+    # Metoda upravuje data předávaná šabloně prostřednictví proměnné context (typu dictionary)
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
+        # Nejprve je zavolána původní implementace metody, jak je řešena v třídě předka, který zastupuje dočasný objekt super()
+        # (temporary object of the superclass)
         context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
+        # Zjištění aktuálního počtu záznamů v dané datové sadě - len(self.get_queryset())
         context['num_films'] = len(self.get_queryset())
+        # Jestliže je v klíčových atributech předaných objektu (self.kwargs) zastoupen atribut 'genre_name' ...
         if 'genre_name' in self.kwargs:
+            # ... šabloně budou prostřednictvím kontextu předány proměnné 'view_title' a 'view_head', které budou obsahovat informace
+            # o aktuálně vybraném žánru
             context['view_title'] = f"Žánr: {self.kwargs['genre_name']}"
             context['view_head'] = f"Žánr filmu: {self.kwargs['genre_name']}"
         else:
+            # ... v opačném případě budou předány stejné proměnné s obecnějším popisem
+            # o aktuálně vybraném žánru
             context['view_title'] = 'Filmy'
             context['view_head'] = 'Přehled filmů'
         return context
