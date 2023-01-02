@@ -1,5 +1,9 @@
 from django.urls import path
 from movies import views
+from graphene_django.views import GraphQLView
+from movies.schema import schema
+from django.views.decorators.csrf import csrf_exempt
+from graphql_jwt.decorators import jwt_cookie
 
 urlpatterns = [
     # cesta (route) pro zobrazení úvodní stránky
@@ -16,4 +20,7 @@ urlpatterns = [
     path('films/<int:pk>/update/', views.FilmUpdate.as_view(), name='film_update'),
     # cesta pro odstranění záznamu o vybraném filmu (podle primárního klíče - pk)
     path('films/<int:pk>/delete/', views.FilmDelete.as_view(), name='film_delete'),
+    path('clear_cache/', views.clear_cache),
+    # path('graphql', GraphQLView.as_view(graphiql=True, schema=schema)),
+    path("graphql/", jwt_cookie(GraphQLView.as_view(graphiql=True, schema=schema))),
 ]

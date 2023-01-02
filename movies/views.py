@@ -1,5 +1,10 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.cache import cache
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.views.decorators.cache import never_cache
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .forms import FilmModelForm
@@ -31,6 +36,7 @@ class FilmListView(ListView):
     context_object_name = 'films_list'
     # Umístění a název šablony
     template_name = 'film/list.html'
+    paginate_by = 3
 
     # Metoda vrací sadu záznamů filtrovaných podle nastavení klíčového argumentu 'genre_name'
     def get_queryset(self):
@@ -81,26 +87,56 @@ class GenreListView(ListView):
     queryset = Genre.objects.order_by('name').all()
 
 
-class FilmCreate(CreateView):
+class FilmCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Film
     template_name = 'movies/film_form_crispy.html'
     fields = ['title', 'plot', 'release_date', 'runtime', 'poster', 'rate', 'genres']
     initial = {'rate': '5'}
+    login_url = '/accounts/login/'
+    permission_required = 'movies.add_film'
 
     def get_success_url(self):
         return reverse_lazy('film_detail', kwargs={'pk': self.object.pk})
 
 
-class FilmUpdate(UpdateView):
+class FilmUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Film
     template_name = 'movies/film_bootstrap_form.html'
     form_class = FilmModelForm
     #fields = '__all__' # Not recommended (potential security issue if more fields added)
+    login_url = '/accounts/login/'
+    permission_required = 'movies.change_film'
 
     def get_success_url(self):
         return reverse_lazy('film_detail', kwargs={'pk': self.object.pk})
 
 
-class FilmDelete(DeleteView):
+class FilmDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Film
     success_url = reverse_lazy('films')
+    login_url = '/accounts/login/'
+    permission_required = 'movies.delete_film'
+
+
+def error_404(request, exception=None):
+        return render(request, 'errors/404.html')
+
+
+def error_500(request):
+    return render(request, 'errors/500.html')
+
+
+def error_403(request, exception=None):
+    return render(request, 'errors/403.html')
+
+
+def error_400(request, exception=None):
+    return render(request, 'errors/400.html')
+
+
+@never_cache
+def clear_cache(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    cache.clear()
+    return HttpResponse('Cache has been cleared')

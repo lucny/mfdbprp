@@ -26,6 +26,11 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
 ]
 
+handler404 = 'movies.views.error_404'
+handler500 = 'movies.views.error_500'
+handler403 = 'movies.views.error_403'
+handler400 = 'movies.views.error_400'
+
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

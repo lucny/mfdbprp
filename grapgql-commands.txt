@@ -1,0 +1,85 @@
+query GenreList {
+  allGenres {
+    	id
+      name
+  }
+}
+
+query OneGenre {
+  getGenre(id: 5) {
+    	id
+      name
+  }
+}
+
+query FilmList {
+  allFilms {
+    	id
+      title
+    	releaseDate
+    	poster
+    	rate
+    	genres {
+        name
+      }
+  }
+}
+
+query OneFilm {
+  getFilm(id: 3) {
+    	id
+      title
+    	releaseDate
+    	poster
+    	rate
+    	genres {
+        name
+      }
+  }
+}
+
+mutation CreateGenre {
+  createGenre(name:"hokus") {
+    genre {
+      name
+    }
+  }
+}
+
+mutation UpadateGenre {
+  updateGenre(id:8, name:"fokus") {
+    genre {
+      name
+    }
+  }
+}
+
+mutation DeleteGenre {
+  deleteGenre(id:8) {
+    genre {
+      name
+    }
+  }
+}
+
+
+mutation TokenAuth {
+  tokenAuth(username: "admin", password: "admin") {
+    token
+    payload
+    refreshExpiresIn
+  }
+}
+
+mutation VerifyToken {
+  verifyToken(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjcyNTkxMTQ5LCJvcmlnSWF0IjoxNjcyNTkwODQ5fQ.LoGcgHf8mzuWRFgUlvZixAo582R8UoqTYbUrgFuj5Do") {
+    payload
+  }
+}
+
+query GetUser {
+  getUser(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjcyNTkxMTQ5LCJvcmlnSWF0IjoxNjcyNTkwODQ5fQ.LoGcgHf8mzuWRFgUlvZixAo582R8UoqTYbUrgFuj5Do") {
+    username
+    email
+  }
+}
